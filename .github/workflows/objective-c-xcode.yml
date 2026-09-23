@@ -1,0 +1,23 @@
+name: Build Dylib
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-13
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Compile Dylib
+        run: |
+          xcrun -sdk iphoneos clang -target arm64-apple-ios13.0 -dynamiclib -Wall \
+            -framework Foundation -framework UIKit \
+            -O3 Tweak.m -o CleanSearch.dylib
+
+      - name: Upload Dylib Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CleanSearch-Dylib
+          path: CleanSearch.dylib
